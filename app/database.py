@@ -38,7 +38,7 @@ class QuestionerDB():
             location varchar NOT NULL,
             images varchar [],
             topic varchar NOT NULL,
-            happeningOn DATETIME NOT NULL,
+            happeningOn TIMESTAMP NOT NULL,
             tags varchar []
         );
         CREATE TABLE IF NOT EXISTS questions(
@@ -60,7 +60,7 @@ class QuestionerDB():
             meetup INTEGER NOT NULL,
             FOREIGN KEY (meetup) REFERENCES meetups(meetupId)\
             ON UPDATE CASCADE ON DELETE CASCADE,
-            user integer REFERENCES users(userId),
+            createdBy integer REFERENCES users(userId),
             response varchar (5)
         );
         CREATE TABLE IF NOT EXISTS comments(
@@ -70,14 +70,11 @@ class QuestionerDB():
             body varchar NOT NULL,
             FOREIGN KEY (question) REFERENCES questions(questionId)\
             ON UPDATE CASCADE ON DELETE CASCADE,
-            FOREIGN KEY (title) REFERENCES questions(title)\
-            ON UPDATE CASCADE ON DELETE CASCADE,
-            FOREIGN KEY (body) REFERENCES questions(body)\
-            ON UPDATE CASCADE ON DELETE CASCADE,
             comment varchar NOT NULL
         );""")
 
         cls.connect.commit()
+        QuestionerDB.database_admin()
 
     @classmethod
     def drop_tables(cls):
@@ -90,25 +87,24 @@ class QuestionerDB():
     @classmethod
     def database_admin(cls):
         """method to create database admin"""
-        firstname = "Nelson"
-        lastname = "Mandela"
-        othername = "lohilala"
-        email = "mandelanelson@email.com"
-        phoneNumber = "0711333666"
-        username = "tata"
-        password = "andela"
-        salt = password + username
+        passwrd = "andela"
+        usernme = "Admin"
+        salt = passwrd + usernme
         hashed = hashlib.md5(str.encode(salt)).hexdigest()
         isAdmin = True
-        query = """SELECT * FROM users WHERE username = %s""".format(username)
+        query = """SELECT * FROM users WHERE username = '{}'""".format(usernme)
         cls.cursor.execute(query)
         admin = cls.cursor.fetchone()
         if not admin:
             query = """INSERT INTO users (firstname, lastname, othername,\
-            email, phoneNumber, username, hashed, isAdmin) VALUES(firstname,\
-            lastname, othername, email, phoneNumber, username, hashed,\
-            isAdmin)"""
+            email, phoneNumber, username, password, isAdmin) VALUES('Nelson',\
+            'lohilala', 'Mandela', 'mandelanelson@email.com', '0711333666',\
+            'Admin', '{}', True)""".format(hashed)
             cls.cursor.execute(query)
             cls.connect.commit()
-        else:
-            cls.connect.close()
+
+    @classmethod
+    def save(cls, query):
+        """Save data into tables"""
+        cls.cursor.execute(query)
+        cls.connect.commit()
