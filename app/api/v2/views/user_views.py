@@ -62,3 +62,40 @@ class Users(Resource):
                 "user": newUser.__dict__
             }]
         }, 201
+
+
+class UserLogin(Resource):
+    """Class to login user"""
+    def __init__(self):
+        """Initialize the login class"""
+        self.parser = RequestParser()
+        self.parser.add_argument("username", type=str, required=True,
+                                 help="please input a username")
+        self.parser.add_argument("password", type=str, required=True,
+                                 help="please input a password")
+
+    def post(self):
+        """method to login user"""
+        data = self.parser.parse_args()
+        data = request.get_json()
+        userName = data["username"]
+        passWord = data["password"]
+
+        hashed = helpers.hash_password(passWord, userName)
+        user = UserModels.check_username(self, userName)
+        if user:
+            check = helpers.check_hash_password(user["password"], hashed)
+            if check is True:
+                return {
+                    "status": 200,
+                    "message": "Logged in as",
+                    "data": user
+                }, 200
+            return {
+                    "status": 404,
+                    "error": "Wrong password"
+            }, 401
+        return {
+            "status": 404,
+            "error": "user not found: Please register"
+        }, 404
