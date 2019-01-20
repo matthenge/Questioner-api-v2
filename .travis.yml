@@ -7,6 +7,15 @@ install:
   - pip install -r requirements.txt
   - pip install coveralls
 
+services:
+  - postgresql
+
+before_script:
+  - export FLASK_APP="run.py"
+  - export FLASK_ENV="testing"
+  - psql -c 'CREATE DATABASE questioner_test;' -U postgres
+  - export TEST_DB_URL="dbname='questioner_test'  user='andela' password='admin' host='localhost'"
+
 script:
   - pytest --cov=app/
   - coveralls

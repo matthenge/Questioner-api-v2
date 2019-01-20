@@ -3,8 +3,12 @@ from flask_restful import Api, Resource
 from flask_restful.reqparse import RequestParser
 from app.api.v2.models.user_models import UserModels
 from app.api.v2.utils.utilities import Helpers
+from app.api.v2.utils.authentication import Authenticate
+from app.api.v2.utils.validator import Validators
 
 helpers = Helpers()
+auth = Authenticate()
+validate = Validators()
 
 
 class Users(Resource):
@@ -43,6 +47,13 @@ class Users(Resource):
         password = args["password"]
         confirm_password = args["confirm_password"]
 
+        if validate.valid_strings(firstname, lastname, othername, phoneNumber):
+            return validate.valid_strings(firstname, lastname, othername,
+                                          phoneNumber)
+        if validate.user_validator(email, password, username):
+            return validate.user_validator(email, password, username)
+        if validate.user_exists(email, username):
+            return validate.user_exists(email, username)
         password = helpers.hash_password(password, username)
         confirm_password = helpers.hash_password(confirm_password, username)
         check = helpers.check_hash_password(password, confirm_password)
@@ -55,10 +66,11 @@ class Users(Resource):
         newUser = UserModels(firstname, lastname, othername, email, username,
                              phoneNumber, password)
         newUser.signup()
-
+        token = auth.token_generator(username)
         return {
             "status": 201,
             "data": [{
+                "token": token.decode('UTF-8'),
                 "user": newUser.__dict__
             }]
         }, 201
@@ -86,10 +98,13 @@ class UserLogin(Resource):
         if user:
             check = helpers.check_hash_password(user["password"], hashed)
             if check is True:
+                token = auth.token_generator(user["username"])
                 return {
                     "status": 200,
-                    "message": "Logged in as",
-                    "data": user
+                    "data": [{
+                        "token": token.decode('UTF-8'),
+                        "user": user
+                    }]
                 }, 200
             return {
                     "status": 404,

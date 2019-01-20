@@ -6,6 +6,7 @@ class Config(object):
     """Main configuration class"""
     DEBUG = False
     TESTING = False
+    SECRET_KEY = os.getenv("SECRET_KEY")
 
 
 class DevelopmentConfig(Config):
