@@ -75,3 +75,17 @@ class Validators():
                     "status": 400,
                     "error": "Please ensure no field is empty"
                 }, 400
+
+    def valid_time(self, happeningOn):
+        """Method to validate happeningOn date"""
+        createdOn = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+        if happeningOn < createdOn:
+            return {
+                "status": 400,
+                "error": "New Meetup cannot happen in the past"
+            }, 400
+
+    def valid_admin(self, username):
+        """Validate admin"""
+        user = UserModels.check_admin(self, username)
+        return user
