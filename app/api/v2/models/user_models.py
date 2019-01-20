@@ -56,11 +56,11 @@ class UserModels(BaseModels):
     def check_admin(self, userName):
         """Method to check if user in an admin"""
         table = "users"
-        columns = "isAdmin"
+        columns = "userId, isAdmin"
         column = "username"
         user = BaseModels.fetch_specific(self, columns, table, column,
                                          userName)
-        if user["isAdmin"] is True:
+        if user["isadmin"] is True:
             return user
 
     def check_email(self, mail):
