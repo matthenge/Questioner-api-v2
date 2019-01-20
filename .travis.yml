@@ -15,7 +15,6 @@ before_script:
   - export FLASK_ENV="testing"
   - psql -c 'CREATE DATABASE questioner_test;' -U postgres
   - export TEST_DB_URL="dbname='questioner_test'  user='andela' password='admin' host='localhost'"
-  - flask migrate
 
 script:
   - pytest --cov=app/
