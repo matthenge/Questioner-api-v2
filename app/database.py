@@ -108,3 +108,17 @@ class QuestionerDB():
         """Save data into tables"""
         cls.cursor.execute(query)
         cls.connect.commit()
+        data = cls.cursor.fetchone()
+        return data
+
+    @classmethod
+    def fetch_one(cls, query):
+        """Method to fetch specific item"""
+        cls.cursor.execute(query)
+        return cls.cursor.fetchone()
+
+    @classmethod
+    def fetch_all(cls, query):
+        """Method to fetch all items"""
+        cls.cursor.execute(query)
+        return cls.cursor.fetchall()

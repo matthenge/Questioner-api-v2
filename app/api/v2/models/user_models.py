@@ -1,5 +1,8 @@
 """Module for user operations"""
 from .base_models import BaseModels
+from app.api.v2.utils.utilities import Helpers
+
+helpers = Helpers()
 
 
 class UserModels(BaseModels):
@@ -39,4 +42,13 @@ class UserModels(BaseModels):
         data = ",".join(map(str, details.values()))
         user = BaseModels.save_data(self, table, columns, values, data)
 
+        return user
+
+    def check_username(self, userName):
+        """Method to retrieve username"""
+        table = "users"
+        columns = "userId, firstname, lastname, username, password, email"
+        column = "username"
+        user = BaseModels.fetch_specific(self, columns, table, column,
+                                         userName)
         return user
