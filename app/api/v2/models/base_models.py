@@ -23,3 +23,14 @@ class BaseModels(QuestionerDB):
         query = """SELECT {} FROM {} WHERE {} = '{}'\
         """.format(columns, table, column, search_item)
         return QuestionerDB.fetch_one(query)
+
+    def fetch_all_items(self, columns, table):
+        """Method to fetch all data"""
+        query = """SELECT {} FROM {}""".format(columns, table)
+        return QuestionerDB.fetch_all(query)
+
+    def fetch_future(self, columns, table, column, search_item):
+        """Method to return specific fields of a future event"""
+        query = """SELECT {} FROM {} WHERE {} > '{}'\
+        """.format(columns, table, column, search_item)
+        return QuestionerDB.fetch_all(query)
