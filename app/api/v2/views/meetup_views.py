@@ -52,3 +52,35 @@ class AllMeetups(Resource):
             "message": "Meetup Created Successfully",
             "meetup": meetup.__dict__
         }, 201
+
+    @login_required
+    def get(self, current_user):
+        """Fetch all meetups"""
+        meetups = MeetupModels.get_all(self)
+        if not meetups:
+            return {
+                "status": 404,
+                "error": "No meetups posted yet"
+            }, 404
+        return {
+            "status": 200,
+            "data": meetups
+        }, 200
+
+
+class Upcoming(Resource):
+    """Class for Upcoming meetups"""
+
+    @login_required
+    def get(self, current_user):
+        """Method to fetch only upcoming meetups"""
+        meetups = MeetupModels.get_upcoming(self)
+        if not meetups:
+            return {
+                "error": "No Upcoming Meetups",
+                "status": 404
+            }, 404
+        return {
+                "status": 200,
+                "meetups": meetups
+            }, 200
