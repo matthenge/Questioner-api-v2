@@ -12,7 +12,7 @@ services:
 
 before_script:
   - psql -c 'CREATE DATABASE questioner_test;' -U postgres
-  - export TEST_DB_URL="dbname='questioner_test'  user='andela' password='' host='localhost'"
+  - export TEST_DB_URL="dbname='questioner_test'  user='' password='' host='localhost'"
   - export FLASK_ENV="testing"
 
 script:
