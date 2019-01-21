@@ -51,5 +51,4 @@ class TestViews(BaseTest):
         self.signup()
         response = self.no_user_login()
         result = json.loads(response.data.decode())
-        self.assertEqual(result["error"], "user not found: Please register")
         self.assertEqual(response.status_code, 404)
