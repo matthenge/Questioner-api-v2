@@ -54,7 +54,13 @@ def login_required(f):
                     "status": 401,
                     "error": "Invalid authentication. Please login again"
                 }, 401
-            return f(*args, **kwargs, current_user=data['username'])
+            user = validate.valid_user(data['username'])
+            if user:
+                return f(*args, **kwargs, current_user=user)
+            return {
+                    "status": 404,
+                    "error": "User not found"
+                }, 404
         else:
             return {
                     "status": 401,
