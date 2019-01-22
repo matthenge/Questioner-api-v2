@@ -73,3 +73,13 @@ class MeetupModels(BaseModels):
                                            search_item)
         meetup = json.dumps(meetup, default=str)
         return meetup
+
+    def delete_specific(self, meetupId):
+        """Delete meetup record"""
+        table = "meetups"
+        column = "meetupId"
+        search_item = meetupId
+        meetup = BaseModels.fetch_data(self, table, column, search_item)
+        if not meetup:
+            return False
+        BaseModels.delete_item(self, table, column, search_item)
