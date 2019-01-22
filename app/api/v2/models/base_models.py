@@ -39,3 +39,21 @@ class BaseModels(QuestionerDB):
         query = """DELETE FROM {} WHERE {} = '{}'\
         """.format(table, column, search_item)
         return QuestionerDB.remove_one(query)
+
+    def update_record(self, table, columns, column, search_item):
+        """Method to update tables"""
+        query = """UPDATE {} SET {} WHERE {} = '{}'\
+        """.format(table, columns, column, search_item)
+        return QuestionerDB.remove_one(query)
+
+    def insert_data(self, table, columns, value1, value2):
+        """Method to save data to table"""
+        query = """INSERT INTO {}({}) VALUES ('{}','{}') \
+        """.format(table, columns, value1, value2)
+        return QuestionerDB.remove_one(query)
+
+    def fetch_some_data(self, columns, table, clm1, val1, clm2, val2):
+        """Method to return data of two conditions"""
+        query = """SELECT {} FROM {} WHERE {} = '{}'\
+        AND {} = '{}'""".format(columns, table, clm1, val1, clm2, val2)
+        return QuestionerDB.fetch_one(query)
