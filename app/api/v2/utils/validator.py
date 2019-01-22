@@ -89,3 +89,8 @@ class Validators():
         """Validate admin"""
         user = UserModels.check_admin(self, username)
         return user
+
+    def valid_user(self, username):
+        """Validate user"""
+        user = UserModels.check_username(self, username)
+        return user
