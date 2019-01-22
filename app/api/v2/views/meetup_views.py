@@ -106,3 +106,17 @@ class OneMeetup(Resource):
                 "status": 200,
                 "meetups": meetup
             }, 200
+
+    @admin_required
+    def delete(self, meetupId, current_user):
+        """Method to delete meetup record"""
+        delete_meetup = MeetupModels.delete_specific(self, meetupId)
+        if delete_meetup is False:
+            return {
+                "status": 404,
+                "error": "Meetup does not exist"
+            }, 404
+        return {
+                "status": 200,
+                "data": "Meetup deleted"
+            }, 200
