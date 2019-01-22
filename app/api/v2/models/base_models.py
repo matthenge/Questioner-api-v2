@@ -33,3 +33,9 @@ class BaseModels(QuestionerDB):
         query = """SELECT {} FROM {} WHERE {} > '{}'\
         """.format(columns, table, column, search_item)
         return QuestionerDB.fetch_all(query)
+
+    def delete_item(self, table, column, search_item):
+        """Method to delete meetup records"""
+        query = """DELETE FROM {} WHERE {} = '{}'\
+        """.format(table, column, search_item)
+        return QuestionerDB.remove_one(query)

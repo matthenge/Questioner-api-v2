@@ -122,3 +122,9 @@ class QuestionerDB():
         """Method to fetch all items"""
         cls.cursor.execute(query)
         return cls.cursor.fetchall()
+
+    @classmethod
+    def remove_one(cls, query):
+        """Method to delete record"""
+        cls.cursor.execute(query)
+        cls.connect.commit()
