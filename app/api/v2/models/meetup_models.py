@@ -1,5 +1,6 @@
 """Module for meetup operations"""
 import datetime
+import json
 from .base_models import BaseModels
 from app.api.v2.utils.utilities import Helpers
 
@@ -28,34 +29,47 @@ class MeetupModels(BaseModels):
             happeningOn=self.happeningOn,
             tags=self.tags
         )
-        table = "meetups"
-        columns = ", ".join(meetup.keys())
-        values = "', '".join(map(str, meetup.values()))
-        details = {
-            "location": "location",
-            "images": "images",
+        meetData = {
             "topic": "topic",
+            "location": "location",
             "happeningOn": "happeningOn",
             "tags": "tags"
         }
-        data = ",".join(map(str, details.values()))
-        newMeetup = BaseModels.save_data(self, table, columns, values, data)
+        table = "meetups"
+        columns = ", ".join(meetup.keys())
+        values = "', '".join(map(str, meetup.values()))
+        details = ",".join(map(str, meetData.values()))
+        newMeetup = BaseModels.save_data(self, table, columns, values, details)
+        newMeetup = json.dumps(newMeetup, default=str)
 
         return newMeetup
 
     def get_all(self):
         """Method to retrieve all meetups"""
         table = "meetups"
-        columns = "meetupId, topic, location, tags"
+        columns = "meetupId, topic, location, happeningOn, tags"
         meetups = BaseModels.fetch_all_items(self, columns, table)
+        meetups = json.dumps(meetups, default=str)
         return meetups
 
     def get_upcoming(self):
         """Method to retrieve only upcoming meetups"""
         table = "meetups"
         current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-        columns = "meetupId, topic, location, tags"
+        columns = "meetupId, topic, location, happeningOn, tags"
         column = "happeningOn"
         meetups = BaseModels.fetch_future(self, columns, table, column,
                                           current_time)
+        meetups = json.dumps(meetups, default=str)
         return meetups
+
+    def get_specific(self, meetupId):
+        """Method to fetch a specific meetup"""
+        table = "meetups"
+        columns = "meetupId, topic, location, happeningOn, tags"
+        column = "meetupId"
+        search_item = meetupId
+        meetup = BaseModels.fetch_specific(self, columns, table, column,
+                                           search_item)
+        meetup = json.dumps(meetup, default=str)
+        return meetup

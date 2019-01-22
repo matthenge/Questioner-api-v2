@@ -5,12 +5,11 @@ from app.database import QuestionerDB
 class BaseModels(QuestionerDB):
     """Class for Model operations"""
 
-    def save_data(self, table, columns, values, data):
+    def save_data(self, table, columns, values, details):
         """Method to save data to table"""
         query = """INSERT INTO {}({}) VALUES ('{}') \
-                RETURNING {};""".format(table, columns, values, data)
-        QuestionerDB.save(query)
-        return data
+                RETURNING {};""".format(table, columns, values, details)
+        return QuestionerDB.save(query)
 
     def fetch_data(self, table, column, search_item):
         """Method to return all fields of a specific item"""

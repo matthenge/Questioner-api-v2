@@ -26,7 +26,7 @@ class QuestionerDB():
             phoneNumber varchar (15),
             username varchar UNIQUE NOT NULL,
             password varchar NOT NULL,
-            registered TIMESTAMP DEFAULT NOW(),
+            registered TIMESTAMP DEFAULT current_timestamp,
             isAdmin BOOL DEFAULT FALSE
         );
         CREATE TABLE IF NOT EXISTS meetups(
@@ -34,7 +34,7 @@ class QuestionerDB():
             userId INTEGER NOT NULL,
             FOREIGN KEY(userId) REFERENCES users(userId)\
             ON UPDATE CASCADE ON DELETE CASCADE,
-            createdOn TIMESTAMP DEFAULT NOW(),
+            createdOn TIMESTAMP DEFAULT current_timestamp,
             location varchar NOT NULL,
             images varchar [],
             topic varchar NOT NULL,
@@ -43,7 +43,7 @@ class QuestionerDB():
         );
         CREATE TABLE IF NOT EXISTS questions(
             questionId serial PRIMARY KEY NOT NULL,
-            createdOn TIMESTAMP DEFAULT NOW(),
+            createdOn TIMESTAMP DEFAULT current_timestamp,
             createdBy INTEGER NOT NULL,
             meetup INTEGER NOT NULL,
             FOREIGN KEY(createdBy) REFERENCES users(userId)\

@@ -46,17 +46,19 @@ class AllMeetups(Resource):
             return validate.valid_time(happeningOn)
         meetup = MeetupModels(userId, location, images, topic, happeningOn,
                               tags)
-        meetup.create_meetup()
+        newMeetup = meetup.create_meetup()
+        newMeetup = json.loads(newMeetup)
 
         return {
-            "message": "Meetup Created Successfully",
-            "meetup": meetup.__dict__
+            "status": 201,
+            "meetup": newMeetup
         }, 201
 
     @login_required
     def get(self, current_user):
         """Fetch all meetups"""
         meetups = MeetupModels.get_all(self)
+        meetups = json.loads(meetups)
         if not meetups:
             return {
                 "status": 404,
@@ -75,12 +77,32 @@ class Upcoming(Resource):
     def get(self, current_user):
         """Method to fetch only upcoming meetups"""
         meetups = MeetupModels.get_upcoming(self)
+        meetups = json.loads(meetups)
         if not meetups:
             return {
-                "error": "No Upcoming Meetups",
-                "status": 404
+                "status": 404,
+                "error": "No Upcoming Meetups"
             }, 404
         return {
                 "status": 200,
                 "meetups": meetups
+            }, 200
+
+
+class OneMeetup(Resource):
+    """Class for specific meetup"""
+
+    @login_required
+    def get(self, meetupId, current_user):
+        """Method to fetch specific meetup"""
+        meetup = MeetupModels.get_specific(self, meetupId)
+        meetup = json.loads(meetup)
+        if not meetup:
+            return {
+                "status": 404,
+                "error": "Meetup does not exist"
+            }, 404
+        return {
+                "status": 200,
+                "meetups": meetup
             }, 200
