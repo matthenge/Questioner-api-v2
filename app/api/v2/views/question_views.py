@@ -51,6 +51,21 @@ class AllQuestions(Resource):
             "data": [newQuestion]
         }, 201
 
+    @login_required
+    def get(self, current_user):
+        """Fetch all questions"""
+        questions = QuestionModels.get_all_questions(self)
+        questions = json.loads(questions)
+        if not questions:
+            return {
+                "status": 404,
+                "error": "No questions posted yet"
+            }, 404
+        return {
+            "status": 200,
+            "data": questions
+        }, 200
+
 
 class Upvote(Resource):
     """Upvote question operation"""
@@ -60,6 +75,30 @@ class Upvote(Resource):
         """Upvote question method"""
         userId = current_user["userid"]
         question = QuestionModels.upvote(self, questionId, userId)
+        if question == "no question":
+            return {
+                "status": 404,
+                "error": "Question does not exist"
+            }, 404
+        elif question == "voted":
+            return {
+                "status": 403,
+                "error": "User already voted"
+            }, 403
+        return {
+            "status": 200,
+            "question": [question]
+        }, 200
+
+
+class Downvote(Resource):
+    """Downvote question operation"""
+
+    @login_required
+    def patch(self, questionId, current_user):
+        """Downvote question method"""
+        userId = current_user["userid"]
+        question = QuestionModels.downvote(self, questionId, userId)
         if question == "no question":
             return {
                 "status": 404,
