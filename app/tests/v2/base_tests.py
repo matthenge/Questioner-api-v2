@@ -35,6 +35,10 @@ class BaseTest(unittest.TestCase):
             "password": "Qwerty123!",
             "confirm_password": "Qwerty123!"
         }
+        self.dbAdmin = {
+            "username": "Admin",
+            "password": "andela"
+        }
         self.email = {
             "firstname": "Nelson",
             "lastname": "Mandela",
@@ -73,6 +77,13 @@ class BaseTest(unittest.TestCase):
             "password": "qwerty",
             "confirm_password": "qwerty"
         }
+        self.meetup = {
+            "location": "Kisumu",
+            "images": "{img1, img2, img3}",
+            "topic": "data science",
+            "happeningOn": "2019-01-22 18:30",
+            "tags": "{#bigdata, #ai}"
+        }
 
     def signup(self):
         """user registration"""
@@ -81,6 +92,15 @@ class BaseTest(unittest.TestCase):
             data=json.dumps(self.oneUser),
             content_type='application/json')
         return res
+
+    def admin_login(self):
+        """Admin login"""
+        res = self.client.post(
+            '/api/v2/auth/login',
+            data=json.dumps(self.dbAdmin),
+            content_type='application/json')
+        admToken = json.loads(res.data.decode("UTF-8"))
+        return admToken
 
     def post_empty_string(self):
         """post question with empty fields"""
@@ -128,6 +148,16 @@ class BaseTest(unittest.TestCase):
             '/api/v2/auth/login',
             data=json.dumps(self.noUser),
             content_type='application/json')
+        return res
+
+    def meetups(self):
+        """Create Meetup"""
+        res = self.client.post(
+           '/api/v2/meetups',
+           headers={"x-access-token": admToken},
+           data=json.dumps(self.meetup),
+           content_type='application/json'
+        )
         return res
 
     def tearDown(self):
