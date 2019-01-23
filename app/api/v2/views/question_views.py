@@ -50,3 +50,27 @@ class AllQuestions(Resource):
             "status": 201,
             "data": [newQuestion]
         }, 201
+
+
+class Upvote(Resource):
+    """Upvote question operation"""
+
+    @login_required
+    def patch(self, questionId, current_user):
+        """Upvote question method"""
+        userId = current_user["userid"]
+        question = QuestionModels.upvote(self, questionId, userId)
+        if question == "no question":
+            return {
+                "status": 404,
+                "error": "Question does not exist"
+            }, 404
+        elif question == "voted":
+            return {
+                "status": 403,
+                "error": "User already voted"
+            }, 403
+        return {
+            "status": 200,
+            "question": [question]
+        }, 200

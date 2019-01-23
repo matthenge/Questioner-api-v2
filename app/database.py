@@ -52,8 +52,7 @@ class QuestionerDB():
             ON UPDATE CASCADE ON DELETE CASCADE,
             title varchar NOT NULL,
             body varchar NOT NULL,
-            votes integer DEFAULT 0,
-            voters integer []
+            votes integer DEFAULT 0
         );
         CREATE TABLE IF NOT EXISTS rsvps(
             rsvpId serial PRIMARY KEY NOT NULL,
@@ -71,6 +70,23 @@ class QuestionerDB():
             FOREIGN KEY (question) REFERENCES questions(questionId)\
             ON UPDATE CASCADE ON DELETE CASCADE,
             comment varchar NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS voters(
+            voteId serial PRIMARY KEY NOT NULL,
+            questionId INTEGER NOT NULL,
+            voterId INTEGER NOT NULL,
+            FOREIGN KEY (questionId) REFERENCES questions(questionId)\
+            ON UPDATE CASCADE ON DELETE CASCADE,
+            FOREIGN KEY(voterId) REFERENCES users(userId)\
+            ON UPDATE CASCADE ON DELETE CASCADE
+        );
+        CREATE TABLE IF NOT EXISTS blacklist(
+            tokenId serial PRIMARY KEY NOT NULL,
+            userId INTEGER NOT NULL,
+            token varchar,
+            loggedOutAt TIMESTAMP DEFAULT current_timestamp,
+            FOREIGN KEY(userId) REFERENCES users(userId)\
+            ON UPDATE CASCADE ON DELETE CASCADE
         );""")
 
         cls.connect.commit()

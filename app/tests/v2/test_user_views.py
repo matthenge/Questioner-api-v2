@@ -1,4 +1,4 @@
-"""Tests"""
+"""User Tests"""
 import unittest
 from app import create_app
 from .base_tests import BaseTest
@@ -7,14 +7,23 @@ import json
 message = "Password must have 8 chars, digit, lower & upper case, symbol"
 
 
-class TestViews(BaseTest):
-    """Test views"""
+class TestUsers(BaseTest):
+    """Test users"""
+
+    def test_add_user(self):
+        """Test user signup"""
+        response = self.signup()
+        result = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 201)
+        self.assertIn("data", result)
 
     def test_login(self):
         """Test user login endpoint"""
         self.signup()
         response = self.user_login()
+        result = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 200)
+        self.assertIn("data", result)
 
     def test_repeat_username(self):
         """Test signup repeat username"""

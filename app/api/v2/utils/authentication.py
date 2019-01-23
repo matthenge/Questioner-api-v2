@@ -16,7 +16,7 @@ class Authenticate:
     def token_generator(self, username):
         """Method to generate token"""
         try:
-            expiry = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+            expiry = datetime.datetime.utcnow() + datetime.timedelta(hours=2)
             details = {
                 'username': username,
                 'exp': expiry
@@ -31,9 +31,9 @@ class Authenticate:
             return str(error)
 
 
-def login_required(f):
+def login_required(fun):
     """User authentication decorator"""
-    @wraps(f)
+    @wraps(fun)
     def authenticate(*args, **kwargs):
         """User authentication decorator"""
         if 'x-access-token' in request.headers:
@@ -56,7 +56,7 @@ def login_required(f):
                 }, 401
             user = validate.valid_user(data['username'])
             if user:
-                return f(*args, **kwargs, current_user=user)
+                return fun(*args, **kwargs, current_user=user)
             return {
                     "status": 404,
                     "error": "User not found"
@@ -69,9 +69,9 @@ def login_required(f):
     return authenticate
 
 
-def admin_required(f):
+def admin_required(fun):
     """Admin authentication decorator"""
-    @wraps(f)
+    @wraps(fun)
     def admin_auth(*args, **kwargs):
         """Admin authentication decorator"""
         if 'x-access-token' in request.headers:
@@ -94,7 +94,7 @@ def admin_required(f):
                 }, 401
             user = validate.valid_admin(data['username'])
             if user:
-                return f(*args, **kwargs, current_user=user)
+                return fun(*args, **kwargs, current_user=user)
             return {
                     "status": 401,
                     "error": "You are not authorized to perform this action"
