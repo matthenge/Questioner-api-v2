@@ -64,9 +64,10 @@ class QuestionerDB():
         );
         CREATE TABLE IF NOT EXISTS comments(
             commentId serial PRIMARY KEY NOT NULL,
+            userId INTEGER NOT NULL,
             question INTEGER NOT NULL,
-            title varchar NOT NULL,
-            body varchar NOT NULL,
+            FOREIGN KEY(userId) REFERENCES users(userId)\
+            ON UPDATE CASCADE ON DELETE CASCADE,
             FOREIGN KEY (question) REFERENCES questions(questionId)\
             ON UPDATE CASCADE ON DELETE CASCADE,
             comment varchar NOT NULL
@@ -96,7 +97,7 @@ class QuestionerDB():
     def drop_tables(cls):
         """Method to delete tables"""
         query = """DROP TABLE IF EXISTS users, meetups, questions, rsvps,\
-        comments CASCADE;"""
+        comments, voters, blacklist CASCADE;"""
         cls.cursor.execute(query)
         cls.connect.commit()
 
