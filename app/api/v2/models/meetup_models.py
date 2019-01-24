@@ -83,3 +83,14 @@ class MeetupModels(BaseModels):
         if not meetup:
             return False
         BaseModels.delete_item(self, table, column, search_item)
+
+    def get_one(self, meetupId):
+        """Method to fetch a one meetup"""
+        table = "meetups"
+        columns = "meetupId, topic"
+        column = "meetupId"
+        search_item = meetupId
+        meetup = BaseModels.fetch_specific(self, columns, table, column,
+                                           search_item)
+        meetup = json.dumps(meetup, default=str)
+        return meetup

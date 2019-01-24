@@ -94,3 +94,12 @@ class Validators():
         """Validate user"""
         user = UserModels.check_username(self, username)
         return user
+
+    def valid_response(self, response):
+        """Method to validate response"""
+        responses = ['no', 'yes', 'maybe']
+        if response not in responses:
+            return {
+                "status": 400,
+                "error": "Response is either 'yes', 'no' or 'maybe'"
+            }, 400
