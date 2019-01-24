@@ -17,16 +17,15 @@ class AllMeetups(Resource):
         """Initialize the meetup class"""
         self.parser = RequestParser()
         self.parser.add_argument("location", type=str, required=True,
-                                 help="please input a valid location")
-        self.parser.add_argument("images", type=str,
-                                 help="please input a valid image url")
+                                 help="location field is missing")
+        self.parser.add_argument("images", type=str, required=True,
+                                 help="Image field is missing")
         self.parser.add_argument("topic", type=str, required=True,
-                                 help="please input a valid topic")
-        self.parser.add_argument("happeningOn",
-                                 type=lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M"),
-                                 required=True, help="Format yyyy-mm-dd hh:mm")
-        self.parser.add_argument("tags", type=str,
-                                 help="please input a valid tags")
+                                 help="Topic field is missing")
+        self.parser.add_argument("happeningOn", type=str, required=True,
+                                 help="Date field is missing")
+        self.parser.add_argument("tags", type=str, required=True,
+                                 help="Tags field seems to be missing")
 
     @admin_required
     def post(self, current_user):
@@ -40,8 +39,12 @@ class AllMeetups(Resource):
         happeningOn = args["happeningOn"]
         tags = args["tags"]
 
-        if validate.valid_strings(location, topic):
-            return validate.valid_strings(location, topic)
+        if validate.valid_date(happeningOn):
+            return validate.valid_date(happeningOn)
+        if validate.valid_topic(topic):
+            return validate.valid_topic(topic)
+        if validate.valid_location(location):
+            return validate.valid_location(location)
         if validate.valid_time(happeningOn):
             return validate.valid_time(happeningOn)
         meetup = MeetupModels(userId, location, images, topic, happeningOn,
@@ -100,7 +103,7 @@ class OneMeetup(Resource):
         if not meetup:
             return {
                 "status": 404,
-                "error": "Meetup does not exist"
+                "error": "Meetup {} does not exist".format(meetupId)
             }, 404
         return {
                 "status": 200,
@@ -114,9 +117,9 @@ class OneMeetup(Resource):
         if delete_meetup is False:
             return {
                 "status": 404,
-                "error": "Meetup does not exist"
+                "error": "Meetup {} does not exist".format(meetupId)
             }, 404
         return {
                 "status": 200,
-                "data": "Meetup deleted"
+                "data": "Meetup {} deleted".format(meetupId)
             }, 200
