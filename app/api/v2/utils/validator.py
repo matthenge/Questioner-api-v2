@@ -73,7 +73,7 @@ class Validators():
             if not re.match(rex, arg):
                 return {
                     "status": 400,
-                    "error": "Please ensure no field is empty"
+                    "error": "comment field cannot empty"
                 }, 400
 
     def valid_location(self, location):
