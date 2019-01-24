@@ -115,3 +115,22 @@ class Downvote(Resource):
             "status": 200,
             "question": [question]
         }, 200
+
+
+class MeetupQuestions(Resource):
+    """Meetup Questions"""
+
+    @login_required
+    def get(self, meetupId, current_user):
+        """Fetch all questions of one meetup"""
+        questions = QuestionModels.get_all_by_one(self, meetupId)
+        questions = json.loads(questions)
+        if not questions:
+            return {
+                "status": 404,
+                "error": "No questions posted for meetup {}".format(meetupId)
+            }, 404
+        return {
+            "status": 200,
+            "data": questions
+        }, 200
