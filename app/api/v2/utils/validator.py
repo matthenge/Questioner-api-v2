@@ -4,6 +4,7 @@ import re
 from app.api.v2.models.user_models import UserModels
 
 message = "Password must have 8 chars, digit, lower & upper case, symbol"
+rex = re.compile(r"^(\s|\S)*(\S)+(\s|\S)*$")
 
 
 class Validators():
@@ -68,12 +69,53 @@ class Validators():
 
     def valid_strings(self, *args):
         """Function to restrict empty strings"""
-        regex = re.compile(r"^(\s|\S)*(\S)+(\s|\S)*$")
+        for arg in args:
+            if not re.match(rex, arg):
+                return {
+                    "status": 400,
+                    "error": "Please ensure no field is empty"
+                }, 400
+
+    def valid_location(self, location):
+        """Function to restrict empty location"""
+        if not re.match(rex, location):
+            return {
+                    "status": 400,
+                    "error": "location cannot be empty"
+                }, 400
+
+    def valid_topic(self, topic):
+        """Function to restrict empty topic"""
+        if not re.match(rex, topic):
+            return {
+                    "status": 400,
+                    "error": "topic cannot be empty"
+                }, 400
+
+    def valid_inputs(self, *args):
+        """Function to validate user inputs"""
+        regex = re.compile(r"^[a-zA-Z]+(([',.-][a-zA-Z ])?[a-zA-Z]*)*$")
         for arg in args:
             if not re.match(regex, arg):
                 return {
                     "status": 400,
-                    "error": "Please ensure no field is empty"
+                    "error": "'{}' does not seem like a valid name".format(arg)
+                }, 400
+
+    def valid_title(self, title):
+        """Function to validate title"""
+        if not re.match(rex, title):
+            return {
+                    "status": 400,
+                    "error": "title cannot be empty"
+                }, 400
+
+    def valid_body(self, body):
+        """Function to validate question body"""
+        if not re.match(rex, body):
+            return {
+                    "status": 400,
+                    "error": "body cannot be empty"
                 }, 400
 
     def valid_time(self, happeningOn):
@@ -102,4 +144,23 @@ class Validators():
             return {
                 "status": 400,
                 "error": "Response is either 'yes', 'no' or 'maybe'"
+            }, 400
+
+    def valid_phone(self, phoneNumber):
+        """Validate phone number"""
+        regex = re.compile(r"^\+?[0-9]{3}-?[0-9]{6,15}$")
+        if not re.match(regex, phoneNumber):
+            return {
+                "status": 400,
+                "error": "'{}' is not a valid phone number".format(phoneNumber)
+            }, 400
+
+    def valid_date(self, date):
+        """Validate the date entered"""
+        try:
+            datetime.datetime.strptime(date, "%Y-%m-%d %H:%M")
+        except ValueError as e:
+            return {
+                "status": 400,
+                "error": "Please use (yyyy-mm-dd hh:mm) format"
             }, 400
