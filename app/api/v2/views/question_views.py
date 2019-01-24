@@ -17,11 +17,11 @@ class AllQuestions(Resource):
         """Initialize the questions class"""
         self.parser = RequestParser()
         self.parser.add_argument("meetup", type=int, required=True,
-                                 help="please input a valid meetupId")
+                                 help="meetup field is missing")
         self.parser.add_argument("title", type=str,
-                                 help="please input a valid title")
+                                 help="title field is missing")
         self.parser.add_argument("body", type=str, required=True,
-                                 help="please input a valid body")
+                                 help="question body is missing")
 
     @login_required
     def post(self, current_user):
@@ -38,10 +38,12 @@ class AllQuestions(Resource):
         if not meetup_exists:
             return {
                 "status": 404,
-                "error": "Meetup does not exist"
+                "error": "Meetup {} does not exist".format(meetup)
             }, 404
-        if validate.valid_strings(title, body):
-            return validate.valid_strings(title, body)
+        if validate.valid_title(title):
+            return validate.valid_title(title)
+        if validate.valid_body(body):
+            return validate.valid_body(body)
         question = QuestionModels(createdBy, meetup, title, body)
         newQuestion = question.create_question()
         newQuestion = json.loads(newQuestion)
@@ -75,16 +77,16 @@ class Upvote(Resource):
         """Upvote question method"""
         userId = current_user["userid"]
         question = QuestionModels.upvote(self, questionId, userId)
-        if question == "no question":
+        if question is False:
             return {
                 "status": 404,
-                "error": "Question does not exist"
+                "error": "Question {} does not exist".format(questionId)
             }, 404
-        elif question == "voted":
+        elif question is True:
             return {
-                "status": 403,
-                "error": "User already voted"
-            }, 403
+                "status": 409,
+                "error": "User {} has already voted".format(userId)
+            }, 409
         return {
             "status": 200,
             "question": [question]
@@ -99,16 +101,16 @@ class Downvote(Resource):
         """Downvote question method"""
         userId = current_user["userid"]
         question = QuestionModels.downvote(self, questionId, userId)
-        if question == "no question":
+        if question is False:
             return {
                 "status": 404,
-                "error": "Question does not exist"
+                "error": "Question {} does not exist".format(questionId)
             }, 404
-        elif question == "voted":
+        elif question is True:
             return {
-                "status": 403,
-                "error": "User already voted"
-            }, 403
+                "status": 409,
+                "error": "User {} already voted".format(userId)
+            }, 409
         return {
             "status": 200,
             "question": [question]
