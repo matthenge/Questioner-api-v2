@@ -94,3 +94,16 @@ class MeetupModels(BaseModels):
                                            search_item)
         meetup = json.dumps(meetup, default=str)
         return meetup
+
+    def repeat_meetup(self, location, happeningOn):
+        """Method to verify a meetup is not posted twice"""
+        columns = "meetupId, topic"
+        table = "meetups"
+        clm1 = "location"
+        val1 = location
+        clm2 = "happeningOn"
+        val2 = happeningOn
+        meetup = BaseModels.fetch_some_data(self, columns, table, clm1,
+                                            val1, clm2, val2)
+        meetup = json.dumps(meetup, default=str)
+        return meetup
