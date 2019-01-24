@@ -47,6 +47,14 @@ class AllMeetups(Resource):
             return validate.valid_location(location)
         if validate.valid_time(happeningOn):
             return validate.valid_time(happeningOn)
+        meet = MeetupModels.repeat_meetup(self, location, happeningOn)
+        meet = json.loads(meet)
+        if meet:
+            return {
+                "status": 409,
+                "error": "a meetup with similar details exists"
+            }, 409
+
         meetup = MeetupModels(userId, location, images, topic, happeningOn,
                               tags)
         newMeetup = meetup.create_meetup()
