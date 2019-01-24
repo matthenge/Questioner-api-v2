@@ -1,6 +1,7 @@
 """Module for user operations"""
 from .base_models import BaseModels
 from app.api.v2.utils.utilities import Helpers
+import json
 
 helpers = Helpers()
 
@@ -36,12 +37,13 @@ class UserModels(BaseModels):
         details = {
             "firstname": "firstname",
             "lastname": "lastname",
+            "email": "email",
             "phoneNumber": "phoneNumber",
             "username": "username"
         }
         data = ",".join(map(str, details.values()))
         user = BaseModels.save_data(self, table, columns, values, data)
-
+        user = json.dumps(user, default=str)
         return user
 
     def check_username(self, userName):
