@@ -52,7 +52,7 @@ class TestUsers(BaseTest):
         """Test empty string inputs"""
         response = self.post_empty_string()
         result = json.loads(response.data.decode())
-        self.assertEqual(result["error"], "Please ensure no field is empty")
+        self.assertEqual(result["error"], "'' does not seem like a valid name")
         self.assertEqual(response.status_code, 400)
 
     def test_no_user_login(self):
