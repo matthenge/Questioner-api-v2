@@ -5,6 +5,7 @@ from app.api.v2.models.user_models import UserModels
 from app.api.v2.utils.utilities import Helpers
 from app.api.v2.utils.authentication import Authenticate
 from app.api.v2.utils.validator import Validators
+import json
 
 helpers = Helpers()
 auth = Authenticate()
@@ -65,13 +66,14 @@ class Users(Resource):
 
         newUser = UserModels(firstname, lastname, othername, email, username,
                              phoneNumber, password)
-        newUser.signup()
+        user = newUser.signup()
+        user = json.loads(user)
         token = auth.token_generator(username)
         return {
             "status": 201,
             "data": [{
                 "token": token.decode('UTF-8'),
-                "user": newUser.__dict__
+                "user": user
             }]
         }, 201
 
