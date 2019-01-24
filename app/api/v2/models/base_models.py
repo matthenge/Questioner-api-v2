@@ -57,3 +57,9 @@ class BaseModels(QuestionerDB):
         query = """SELECT {} FROM {} WHERE {} = '{}'\
         AND {} = '{}'""".format(columns, table, clm1, val1, clm2, val2)
         return QuestionerDB.fetch_one(query)
+
+    def fetch_all_by_one(self, columns, table, column, search_item):
+        """Method to return specific fields of items"""
+        query = """SELECT {} FROM {} WHERE {} = '{}'\
+        """.format(columns, table, column, search_item)
+        return QuestionerDB.fetch_all(query)
