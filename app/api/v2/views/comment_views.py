@@ -34,7 +34,7 @@ class AllComments(Resource):
         if not question_exists:
             return {
                 "status": 404,
-                "error": "Question does not exist"
+                "error": "Question {} does not exist".format(question)
             }, 404
         if validate.valid_strings(comment):
             return validate.valid_strings(comment)
