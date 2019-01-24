@@ -17,7 +17,7 @@ class Rsvps(Resource):
         """Initialize the rsvps class"""
         self.parser = RequestParser()
         self.parser.add_argument("response", type=str, required=True,
-                                 help="Input a 'yes', 'no' or 'maybe'")
+                                 help="response field is missing")
 
     @login_required
     def post(self, meetupId, current_user):
@@ -32,7 +32,7 @@ class Rsvps(Resource):
         if not meetup_exists:
             return {
                 "status": 404,
-                "error": "Meetup does not exist"
+                "error": "Meetup {} does not exist".format(meetup)
             }, 404
         user = RsvpModels.check_user(self, createdBy, meetup)
         if user:
