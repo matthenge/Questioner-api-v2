@@ -37,7 +37,7 @@ class TestMeetups(BaseTest):
         response = self.delete_meetup()
         result = json.loads(response.data.decode("UTF-8"))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(result["data"], "Meetup deleted")
+        self.assertEqual(result["data"], "Meetup 1 deleted")
 
     def test_get_all_meetups(self):
         """Test get all meetups endpoint"""

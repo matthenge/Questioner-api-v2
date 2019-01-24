@@ -51,13 +51,13 @@ class QuestionModels(BaseModels):
         question = json.dumps(question, default=str)
         question = json.loads(question)
         if not question:
-            return "no question"
+            return False
         user = BaseModels.fetch_some_data(self, fields, tbl, "voterId", userId,
                                           "questionId", questionId)
         user = json.dumps(user, default=str)
         user = json.loads(user)
         if user:
-            return "voted"
+            return True
         updated = BaseModels.update_record(self, table, columns, column,
                                            search_item)
         voter = BaseModels.insert_data(self, tbl, fields, questionId, userId)
@@ -82,13 +82,13 @@ class QuestionModels(BaseModels):
         question = json.dumps(question, default=str)
         question = json.loads(question)
         if not question:
-            return "no question"
+            return False
         user = BaseModels.fetch_some_data(self, fields, tbl, "voterId", userId,
                                           "questionId", questionId)
         user = json.dumps(user, default=str)
         user = json.loads(user)
         if user:
-            return "voted"
+            return True
         updated = BaseModels.update_record(self, table, columns, column,
                                            search_item)
         voter = BaseModels.insert_data(self, tbl, fields, questionId, userId)

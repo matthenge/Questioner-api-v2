@@ -19,21 +19,21 @@ class Users(Resource):
         """Initialize the user class"""
         self.parser = RequestParser()
         self.parser.add_argument("firstname", type=str, required=True,
-                                 help="please input a valid name")
+                                 help="Firstname is missing")
         self.parser.add_argument("lastname", type=str, required=True,
-                                 help="please input a valid name")
+                                 help="lastname is missing")
         self.parser.add_argument("othername", type=str, required=True,
-                                 help="please input a valid name")
+                                 help="othername is missing")
         self.parser.add_argument("email", type=str, required=True,
-                                 help="please input an email")
+                                 help="email is missing")
         self.parser.add_argument("phoneNumber", type=str, required=True,
-                                 help="please input a valid phone number")
+                                 help="phoneNumber is missing")
         self.parser.add_argument("username", type=str, required=True,
-                                 help="please input a username")
+                                 help="Username is missing")
         self.parser.add_argument("password", type=str, required=True,
-                                 help="please input a password")
+                                 help="password is missing")
         self.parser.add_argument("confirm_password", type=str, required=True,
-                                 help="confirm your password")
+                                 help="confirm password is missing")
 
     def post(self):
         """Register user endpoint"""
@@ -48,9 +48,10 @@ class Users(Resource):
         password = args["password"]
         confirm_password = args["confirm_password"]
 
-        if validate.valid_strings(firstname, lastname, othername, phoneNumber):
-            return validate.valid_strings(firstname, lastname, othername,
-                                          phoneNumber)
+        if validate.valid_inputs(firstname, lastname, othername):
+            return validate.valid_inputs(firstname, lastname, othername)
+        if validate.valid_phone(phoneNumber):
+            return validate.valid_phone(phoneNumber)
         if validate.user_validator(email, password, username):
             return validate.user_validator(email, password, username)
         if validate.user_exists(email, username):
@@ -60,9 +61,9 @@ class Users(Resource):
         check = helpers.check_hash_password(password, confirm_password)
         if not check:
             return {
-                "status": 403,
+                "status": 400,
                 "error": "Passwords do not match"
-            }, 403
+            }, 400
 
         newUser = UserModels(firstname, lastname, othername, email, username,
                              phoneNumber, password)
