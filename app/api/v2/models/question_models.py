@@ -105,3 +105,14 @@ class QuestionModels(BaseModels):
         questions = BaseModels.fetch_all_items(self, columns, table)
         questions = json.dumps(questions, default=str)
         return questions
+
+    def get_all_by_one(self, meetupId):
+        """Method to fetch questions of a meetup"""
+        table = "questions"
+        columns = "questionId, meetup, title, body, votes"
+        column = "meetup"
+        search_item = meetupId
+        questions = BaseModels.fetch_all_by_one(self, columns, table, column,
+                                                search_item)
+        questions = json.dumps(questions, default=str)
+        return questions
