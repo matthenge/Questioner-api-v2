@@ -37,9 +37,9 @@ class Rsvps(Resource):
         user = RsvpModels.check_user(self, createdBy, meetup)
         if user:
             return {
-                "status": 403,
-                "error": "User already reserved a spot"
-            }, 403
+                "status": 409,
+                "error": "User {} already reserved a spot".format(createdBy)
+            }, 409
         if validate.valid_response(response):
             return validate.valid_response(response)
         rsvp = RsvpModels(meetup, createdBy, response)
