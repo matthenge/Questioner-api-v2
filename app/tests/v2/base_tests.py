@@ -93,6 +93,9 @@ class BaseTest(unittest.TestCase):
             "title": "data science",
             "body": "what is data science?"
         }
+        self.rsvp = {
+            "response": "yes"
+        }
         self.admToken = self.admin_login()
 
     def signup(self):
@@ -243,6 +246,36 @@ class BaseTest(unittest.TestCase):
            '/api/v2/comments/',
            headers={"x-access-token": "{}".format(self.admToken)},
            data=json.dumps(self.comment),
+           content_type='application/json'
+        )
+        return res
+
+    def post_rsvps(self):
+        """Post rsvps"""
+        res = self.client.post(
+           '/api/v2/meetups/1/rsvps',
+           headers={"x-access-token": "{}".format(self.admToken)},
+           data=json.dumps(self.rsvp),
+           content_type='application/json'
+        )
+        return res
+
+    def post_rsvp_nonexistent_meetup(self):
+        """Post rsvps to noneexistent meetup"""
+        res = self.client.post(
+           '/api/v2/meetups/20/rsvps',
+           headers={"x-access-token": "{}".format(self.admToken)},
+           data=json.dumps(self.rsvp),
+           content_type='application/json'
+        )
+        return res
+
+    def post_rsvps_twice(self):
+        """Post rsvps twice"""
+        res = self.client.post(
+           '/api/v2/meetups/1/rsvps',
+           headers={"x-access-token": "{}".format(self.admToken)},
+           data=json.dumps(self.rsvp),
            content_type='application/json'
         )
         return res
