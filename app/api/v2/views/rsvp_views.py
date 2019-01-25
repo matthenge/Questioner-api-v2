@@ -53,3 +53,19 @@ class Rsvps(Resource):
                 newRsvp
             ]
         }, 201
+
+    @login_required
+    def get(self, meetupId, current_user):
+        """Fetch all rsvps of one meetup"""
+        rsvps = RsvpModels.fetch_all_by_meetup(self, meetupId)
+        rsvps = json.loads(rsvps)
+        if not rsvps:
+            return {
+                "status": 404,
+                "error": "No reservations posted for meetup {}\
+                ".format(meetupId)
+            }, 404
+        return {
+            "status": 200,
+            "data": rsvps
+        }, 200

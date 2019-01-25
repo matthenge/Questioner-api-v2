@@ -42,3 +42,14 @@ class RsvpModels(BaseModels):
         user = json.dumps(user, default=str)
         user = json.loads(user)
         return user
+
+    def fetch_all_by_meetup(self, meetupId):
+        """Method to fetch rsvps of a meetup"""
+        table = "rsvps"
+        columns = "meetup, createdBy, response"
+        column = "meetup"
+        search_item = meetupId
+        rsvps = BaseModels.fetch_all_by_one(self, columns, table, column,
+                                            search_item)
+        rsvps = json.dumps(rsvps, default=str)
+        return rsvps
