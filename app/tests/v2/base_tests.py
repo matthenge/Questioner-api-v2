@@ -81,7 +81,7 @@ class BaseTest(unittest.TestCase):
             "location": "Kisumu",
             "images": "{img1, img2, img3}",
             "topic": "data science",
-            "happeningOn": "2019-01-26 18:30",
+            "happeningOn": "2019-05-26 18:30",
             "tags": "{#bigdata, #ai}"
         }
         self.comment = {
