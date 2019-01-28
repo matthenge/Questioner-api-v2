@@ -116,3 +116,14 @@ class QuestionModels(BaseModels):
                                                 search_item)
         questions = json.dumps(questions, default=str)
         return questions
+
+    def get_all_by_user(self, userId):
+        """Method to fetch questions of a specific user"""
+        table = "questions"
+        columns = "questionId, createdBy, meetup, title, body, votes"
+        column = "createdBy"
+        search_item = userId
+        questions = BaseModels.fetch_all_by_one(self, columns, table, column,
+                                                search_item)
+        questions = json.dumps(questions, default=str)
+        return questions
