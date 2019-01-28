@@ -2,6 +2,7 @@ from flask import Blueprint
 from flask_restful import Api, Resource
 from app.api.v2.views.user_views import Users, UserLogin
 from app.api.v2.views.meetup_views import AllMeetups, Upcoming, OneMeetup
+from app.api.v2.views.meetup_views import AdminMeetups
 from app.api.v2.views.question_views import AllQuestions, Upvote, Downvote
 from app.api.v2.views.question_views import MeetupQuestions, UserQuestions
 from app.api.v2.views.comment_views import AllComments, QuestionComments
@@ -16,6 +17,7 @@ api.add_resource(UserLogin, '/auth/login', strict_slashes=False)
 api.add_resource(AllMeetups, '/meetups', strict_slashes=False)
 api.add_resource(Upcoming, '/meetups/upcoming/', strict_slashes=False)
 api.add_resource(OneMeetup, '/meetups/<int:meetupId>', strict_slashes=False)
+api.add_resource(AdminMeetups, '/meetups/admin', strict_slashes=False)
 api.add_resource(Rsvps, '/meetups/<int:meetupId>/rsvps', strict_slashes=False)
 api.add_resource(AllQuestions, '/questions', strict_slashes=False)
 api.add_resource(UserQuestions, '/questions/user', strict_slashes=False)
