@@ -5,6 +5,7 @@ from app.api.v2.models.user_models import UserModels
 from app.api.v2.utils.utilities import Helpers
 from app.api.v2.utils.authentication import Authenticate
 from app.api.v2.utils.validator import Validators
+from app.api.v2.utils.authentication import admin_required
 import json
 
 helpers = Helpers()
@@ -117,3 +118,22 @@ class UserLogin(Resource):
             "status": 404,
             "error": "user not found: Please register"
         }, 404
+
+
+class Promote(Resource):
+    """Class to promote user role"""
+
+    @admin_required
+    def put(self, userId, current_user):
+        """Promote normal user to admin status"""
+        user = UserModels.promote_user(self, userId)
+        user = json.loads(user)
+        if not user:
+            return {
+                "status": 404,
+                "error": "User {} not found".format(userId)
+            }, 404
+        return {
+            "status": 200,
+            "data": user
+        }, 200
