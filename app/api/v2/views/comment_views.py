@@ -50,6 +50,23 @@ class AllComments(Resource):
             ]
         }, 201
 
+    @login_required
+    def get(self, current_user):
+        """Fetch all comments by user"""
+        userId = current_user["userid"]
+        comments = CommentModels.retrieve_all_by_user(self, userId)
+        comments = json.loads(comments)
+        if not comments:
+            return {
+                "status": 404,
+                "error": "No comments posted by user {}\
+                ".format(userId)
+            }, 404
+        return {
+            "status": 200,
+            "data": comments
+        }, 200
+
 
 class QuestionComments(Resource):
     """Question comments"""
