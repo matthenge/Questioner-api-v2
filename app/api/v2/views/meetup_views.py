@@ -131,3 +131,23 @@ class OneMeetup(Resource):
                 "status": 200,
                 "data": "Meetup {} deleted".format(meetupId)
             }, 200
+
+
+class AdminMeetups(Resource):
+    """Fetch admin meetups"""
+
+    @admin_required
+    def get(self, current_user):
+        """Fetch all meetups by an admin"""
+        userId = current_user["userid"]
+        meetups = MeetupModels.get_all_by_admin(self, userId)
+        meetups = json.loads(meetups)
+        if not meetups:
+            return {
+                "status": 404,
+                "error": "No meetups posted by Admin {} yet".format(userId)
+            }, 404
+        return {
+            "status": 200,
+            "data": meetups
+        }, 200

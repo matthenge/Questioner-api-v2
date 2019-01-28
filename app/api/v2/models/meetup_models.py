@@ -107,3 +107,14 @@ class MeetupModels(BaseModels):
                                             val1, clm2, val2)
         meetup = json.dumps(meetup, default=str)
         return meetup
+
+    def get_all_by_admin(self, userId):
+        """Method to fetch meetups by an admin"""
+        table = "meetups"
+        columns = "meetupId, userId, topic, location, happeningOn, tags"
+        column = "userId"
+        search_item = userId
+        meetups = BaseModels.fetch_all_by_one(self, columns, table, column,
+                                              search_item)
+        meetups = json.dumps(meetups, default=str)
+        return meetups
