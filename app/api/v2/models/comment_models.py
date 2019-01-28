@@ -53,3 +53,14 @@ class CommentModels(BaseModels):
                                                search_item)
         comments = json.dumps(comments, default=str)
         return comments
+
+    def retrieve_all_by_user(self, createdBy):
+        """Method to fetch comments by a user"""
+        table = "comments"
+        columns = "userId, question, comment"
+        column = "userId"
+        search_item = createdBy
+        comments = BaseModels.fetch_all_by_one(self, columns, table, column,
+                                               search_item)
+        comments = json.dumps(comments, default=str)
+        return comments
