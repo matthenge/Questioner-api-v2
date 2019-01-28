@@ -73,3 +73,17 @@ class UserModels(BaseModels):
         user = BaseModels.fetch_specific(self, columns, table, column,
                                          mail)
         return user
+
+    def promote_user(self, userId):
+        """Method to promote user to admin role"""
+        table = "users"
+        columns = "isAdmin=True"
+        column = "userId"
+        data = "userId, firstname, lastname, username, isAdmin"
+        search_item = userId
+        BaseModels.update_record(self, table, columns, column,
+                                 search_item)
+        user = BaseModels.fetch_specific(self, data, table, column,
+                                         search_item)
+        user = json.dumps(user, default=str)
+        return user
