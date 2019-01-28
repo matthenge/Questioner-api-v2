@@ -134,3 +134,23 @@ class MeetupQuestions(Resource):
             "status": 200,
             "data": questions
         }, 200
+
+
+class UserQuestions(Resource):
+    """User Questions"""
+
+    @login_required
+    def get(self, current_user):
+        """Fetch all questions of a user"""
+        userId = current_user["userid"]
+        questions = QuestionModels.get_all_by_user(self, userId)
+        questions = json.loads(questions)
+        if not questions:
+            return {
+                "status": 404,
+                "error": "No questions posted by user {}".format(userId)
+            }, 404
+        return {
+            "status": 200,
+            "data": questions
+        }, 200
