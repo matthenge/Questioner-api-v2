@@ -68,7 +68,7 @@ class UserModels(BaseModels):
     def check_email(self, mail):
         """Method to check email"""
         table = "users"
-        columns = "userId, username"
+        columns = "userId, email, username"
         column = "email"
         user = BaseModels.fetch_specific(self, columns, table, column,
                                          mail)
@@ -81,6 +81,20 @@ class UserModels(BaseModels):
         column = "userId"
         data = "userId, firstname, lastname, username, isAdmin"
         search_item = userId
+        BaseModels.update_record(self, table, columns, column,
+                                 search_item)
+        user = BaseModels.fetch_specific(self, data, table, column,
+                                         search_item)
+        user = json.dumps(user, default=str)
+        return user
+
+    def reset_password(self, userName, password):
+        """Method to promote user to admin role"""
+        table = "users"
+        columns = "password='{}'".format(password)
+        column = "username"
+        data = "userId, email, username"
+        search_item = userName
         BaseModels.update_record(self, table, columns, column,
                                  search_item)
         user = BaseModels.fetch_specific(self, data, table, column,

@@ -137,3 +137,68 @@ class Promote(Resource):
             "status": 200,
             "data": user
         }, 200
+
+
+class ResetPassword(Resource):
+    """Class to reset password"""
+
+    def __init__(self):
+        """Initialize the login class"""
+        self.parser = RequestParser()
+        self.parser.add_argument("email", type=str, required=True,
+                                 help="Please enter your email")
+
+    def post(self):
+        """Method to request password reset"""
+        data = self.parser.parse_args()
+        data = request.get_json()
+        email = data["email"]
+        mail = UserModels.check_email(self, email)
+        if not mail:
+            return {
+                "status": 404,
+                "error": "No account with that Email: Please register"
+            }, 404
+        token = auth.reset_token(mail["username"])
+        return {
+                "status": 200,
+                "token": token,
+                "message": "An Email has been sent with instructions"
+        }
+
+    def put(self):
+        """Method to reset the password"""
+        self.parser = RequestParser()
+        self.parser.add_argument("password", type=str, required=True,
+                                 help="password is missing")
+        self.parser.add_argument("confirm_password", type=str, required=True,
+                                 help="confirm password is missing")
+        data = self.parser.parse_args()
+        data = request.get_json()
+        password = data["password"]
+        confirm_password = data["confirm_password"]
+        if 'x-reset-token' in request.headers:
+            token = request.headers['x-reset-token']
+            verify = auth.verify_token(token)
+            if verify is None:
+                return {
+                    "status": 401,
+                    "error": "Invalid or Expired token"
+                }, 401
+            if validate.valid_password(password):
+                return validate.valid_password(password)
+            password = helpers.hash_password(password, verify)
+            confirm_password = helpers.hash_password(confirm_password, verify)
+            check = helpers.check_hash_password(password, confirm_password)
+            if not check:
+                return {
+                    "status": 400,
+                    "error": "Passwords do not match"
+                }, 400
+            user = UserModels.reset_password(self, verify, password)
+            user = json.loads(user)
+            return {
+                "status": 200,
+                "message": "Password changed successfully",
+                "data": user
+            }, 200
