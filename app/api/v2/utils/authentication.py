@@ -2,6 +2,7 @@
 import datetime
 import jwt
 import os
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from functools import wraps
 from flask import request, current_app
 from app.api.v2.models.user_models import UserModels
@@ -29,6 +30,24 @@ class Authenticate:
             return token
         except Exception as error:
             return str(error)
+
+    def reset_token(self, username):
+        """Function to generate reset password token"""
+        s = Serializer(os.getenv("SECRET_KEY"), expires_in=3600)
+        token = s.dumps({
+            "username": username
+        }).decode("UTF-8")
+        return token
+
+    @staticmethod
+    def verify_token(token):
+        """Verify reset password token"""
+        s = Serializer(os.getenv("SECRET_KEY"))
+        try:
+            username = s.loads(token)["username"]
+        except:
+            return None
+        return username
 
 
 def login_required(fun):
@@ -85,7 +104,7 @@ def admin_required(fun):
             except jwt.ExpiredSignatureError:
                 return {
                     "status": 401,
-                    "error": "Login expired. Please login again"
+                    "error": "Session expired. Please login again"
                 }, 401
             except jwt.InvalidTokenError:
                 return {
