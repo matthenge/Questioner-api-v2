@@ -5,7 +5,7 @@ from app.api.v2.models.user_models import UserModels
 from app.api.v2.utils.utilities import Helpers
 from app.api.v2.utils.authentication import Authenticate
 from app.api.v2.utils.validator import Validators
-from app.api.v2.utils.authentication import admin_required
+from app.api.v2.utils.authentication import admin_required, login_required
 import json
 
 helpers = Helpers()
@@ -200,5 +200,24 @@ class ResetPassword(Resource):
             return {
                 "status": 200,
                 "message": "Password changed successfully",
+                "data": user
+            }, 200
+
+
+class UserLogout(Resource):
+    """User Logout Operations"""
+
+    @login_required
+    def post(self, current_user):
+        """Logout user"""
+        userId = current_user["userid"]
+        token = request.headers['x-access-token']
+        UserModels.logout_user(self, userId, token)
+        logged_out = UserModels.check_blacklisted(self, token)
+        logged_out = json.dumps(logged_out, default=str)
+        user = json.loads(logged_out)
+        return {
+                "status": 200,
+                "message": "logged out successfully",
                 "data": user
             }, 200

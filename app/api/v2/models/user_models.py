@@ -101,3 +101,22 @@ class UserModels(BaseModels):
                                          search_item)
         user = json.dumps(user, default=str)
         return user
+
+    def logout_user(self, userId, token):
+        """Method to logout user"""
+        table = "blacklist"
+        columns = "userId, token"
+        data = "loggedOutAt"
+        user = BaseModels.insert_data(self, table, columns, userId, token,
+                                      data)
+        return user
+
+    def check_blacklisted(self, token):
+        """Method to check blacklisted tokens"""
+        table = "blacklist"
+        columns = "loggedOutAt"
+        column = "token"
+        search_item = token
+        token = BaseModels.fetch_specific(self, columns, table, column,
+                                          search_item)
+        return token
