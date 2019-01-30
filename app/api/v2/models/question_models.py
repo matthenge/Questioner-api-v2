@@ -60,7 +60,8 @@ class QuestionModels(BaseModels):
             return True
         updated = BaseModels.update_record(self, table, columns, column,
                                            search_item)
-        voter = BaseModels.insert_data(self, tbl, fields, questionId, userId)
+        voter = BaseModels.insert_data(self, tbl, fields, questionId, userId,
+                                       "voterId")
         quiz = BaseModels.fetch_specific(self, data, table, column,
                                          search_item)
         quiz = json.dumps(quiz, default=str)
@@ -91,7 +92,8 @@ class QuestionModels(BaseModels):
             return True
         updated = BaseModels.update_record(self, table, columns, column,
                                            search_item)
-        voter = BaseModels.insert_data(self, tbl, fields, questionId, userId)
+        voter = BaseModels.insert_data(self, tbl, fields, questionId, userId,
+                                       "voterId")
         quiz = BaseModels.fetch_specific(self, data, table, column,
                                          search_item)
         quiz = json.dumps(quiz, default=str)
