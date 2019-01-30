@@ -57,6 +57,12 @@ def login_required(fun):
         """User authentication decorator"""
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
+            blacklisted = validate.blacklisted(token)
+            if blacklisted:
+                return {
+                    "status": 401,
+                    "error": "You are logged out. Please login again"
+                }, 401
             try:
                 data = jwt.decode(
                                     token,
@@ -95,6 +101,12 @@ def admin_required(fun):
         """Admin authentication decorator"""
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
+            blacklisted = validate.blacklisted(token)
+            if blacklisted:
+                return {
+                    "status": 401,
+                    "error": "You are logged out. Please login again"
+                }
             try:
                 data = jwt.decode(
                                     token,
