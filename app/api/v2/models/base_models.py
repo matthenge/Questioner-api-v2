@@ -48,7 +48,7 @@ class BaseModels(QuestionerDB):
 
     def insert_data(self, table, columns, value1, value2, data):
         """Method to save data to table"""
-        query = """INSERT INTO {}({}) VALUES ('{}','{}') RETURNING {};\
+        query = """INSERT INTO {}({}) VALUES ('{}','{}') RETURNING {}\
         """.format(table, columns, value1, value2, data)
         return QuestionerDB.remove_one(query)
 
