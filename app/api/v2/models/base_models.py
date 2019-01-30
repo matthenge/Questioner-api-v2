@@ -46,10 +46,10 @@ class BaseModels(QuestionerDB):
         """.format(table, columns, column, search_item)
         return QuestionerDB.remove_one(query)
 
-    def insert_data(self, table, columns, value1, value2):
+    def insert_data(self, table, columns, value1, value2, data):
         """Method to save data to table"""
-        query = """INSERT INTO {}({}) VALUES ('{}','{}') \
-        """.format(table, columns, value1, value2)
+        query = """INSERT INTO {}({}) VALUES ('{}','{}') RETURNING {};\
+        """.format(table, columns, value1, value2, data)
         return QuestionerDB.remove_one(query)
 
     def fetch_some_data(self, columns, table, clm1, val1, clm2, val2):
