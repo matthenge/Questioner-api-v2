@@ -132,6 +132,11 @@ class Validators():
         user = UserModels.check_admin(self, username)
         return user
 
+    def blacklisted(self, token):
+        """Validate token"""
+        blacklisted = UserModels.check_blacklisted(self, token)
+        return blacklisted
+
     def valid_user(self, username):
         """Validate user"""
         user = UserModels.check_username(self, username)
