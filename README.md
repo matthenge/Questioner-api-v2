@@ -50,18 +50,26 @@ These instructions will get you a copy of the project running on your local mach
 | --- | --- | --- |
 | `POST` | ` /api/v2/auth/signup ` | Signup new User |
 | `POST` | ` /api/v2/auth/login ` | Login a User |
+| `POST` | ` /api/v2/auth/logout ` | Logout a User |
+| `PUT` | ` /api/v2/auth/promote/<int:userId> ` | Promote a User |
+| `PUT` | ` /api/v2/auth/reset_password ` | Pasword Reset |
+| `POST` | ` /api/v2/auth/reset_password ` | Request Password Reset |
 | `POST` | ` /api/v2/meetups ` | Create new Meetup |
 | `POST` | ` /api/v2/questions ` | Post new Question |
 | `POST` | ` /api/v2/comments/ ` | Post new Comment |
 | `POST` | ` /api/v2/meetups/<meetupId>/rsvps ` | Create an RSVP |
 | `GET` | ` /api/v2/meetups/<meetupId> ` | Fetch a Specific Meetup |
 | `GET` | ` /api/v2/meetups ` | Fetch all Meetups |
+| `GET` | ` /api/v2/meetups/admin ` | Fetch all Meetups by Admin |
 | `GET` | ` /api/v2/questions ` | Fetch all Questions |
+| `GET` | ` /api/v2/questions/user ` | Fetch all Questions by User |
 | `GET` | ` /api/v2/meetups/upcoming/ ` | Fetch all upcoming Meetups |
+| `GET` | ` /api/v2/meetups/<meetupId>/rsvps ` | Fetch all Meetup RSVPs |
 | `GET` | ` /api/v2//questions/<int:meetupId> ` | Fetch all Meetup questions |
 | `GET` | ` /api/v2/comments/<int:questionId> ` | Fetch all question comments |
 | `PATCH` | ` /api/v2/questions/<questionId>/upvote ` | Upvote a specific Question | 
 | `PATCH` | ` /api/v2/questions/<questionId>/downvote ` | Downvote a specific Question |
+| `DELETE` | ` /api/v2/meetups/<meetupId> ` | Delete a Specific Meetup |
 
 ## Built with
 
