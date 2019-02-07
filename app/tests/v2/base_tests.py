@@ -112,8 +112,7 @@ class BaseTest(unittest.TestCase):
             '/api/v2/auth/login',
             data=json.dumps(self.dbAdmin),
             content_type='application/json')
-        print(res.get_json().get("data")[0].get("token"))
-        admToken = res.get_json().get("data")[0].get("token")
+        admToken = res.get_json().get("token")
         return admToken
 
     def post_empty_string(self):

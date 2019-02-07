@@ -23,7 +23,7 @@ class TestUsers(BaseTest):
         response = self.user_login()
         result = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 200)
-        self.assertIn("token", result.get("data")[0])
+        self.assertIn("token", result)
 
     def test_repeat_username(self):
         """Test signup repeat username"""

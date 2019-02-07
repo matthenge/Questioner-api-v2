@@ -73,8 +73,8 @@ class Users(Resource):
         token = auth.token_generator(username)
         return {
             "status": 201,
+            "token": token.decode('UTF-8'),
             "data": [{
-                "token": token.decode('UTF-8'),
                 "user": user
             }]
         }, 201
@@ -105,8 +105,8 @@ class UserLogin(Resource):
                 token = auth.token_generator(user["username"])
                 return {
                     "status": 200,
+                    "token": token.decode('UTF-8'),
                     "data": [{
-                        "token": token.decode('UTF-8'),
                         "user": user
                     }]
                 }, 200
