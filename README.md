@@ -52,7 +52,7 @@ These instructions will get you a copy of the project running on your local mach
 | `POST` | ` /api/v2/auth/login ` | Login a User |
 | `POST` | ` /api/v2/auth/logout ` | Logout a User |
 | `PUT` | ` /api/v2/auth/promote/<int:userId> ` | Promote a User |
-| `PUT` | ` /api/v2/auth/reset_password ` | Pasword Reset |
+| `PUT` | ` /api/v2/auth/reset_password/<token> ` | Pasword Reset |
 | `POST` | ` /api/v2/auth/reset_password ` | Request Password Reset |
 | `POST` | ` /api/v2/meetups ` | Create new Meetup |
 | `POST` | ` /api/v2/questions ` | Post new Question |
