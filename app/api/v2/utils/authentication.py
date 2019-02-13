@@ -4,7 +4,8 @@ import jwt
 import os
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from functools import wraps
-from flask import request, current_app
+from flask import request, current_app, url_for
+from flask_mail import Message
 from app.api.v2.models.user_models import UserModels
 from app.api.v2.utils.validator import Validators
 
@@ -136,3 +137,19 @@ def admin_required(fun):
                     "error": "You are not logged in. Please login"
                 }, 401
     return admin_auth
+
+
+def send_mail(email, url, token):
+    """Method to send user email"""
+    msg = Message(
+            "Password Reset Request",
+            sender="noreply@questioner.com",
+            recipients=[email])
+    msg.body = f"""To reset your password, visit the following link:
+
+{url_for(url, token=token, _external=True)}
+
+If you did not make this request then ignore this email.
+"""
+    from app import mail
+    mail.send(msg)
