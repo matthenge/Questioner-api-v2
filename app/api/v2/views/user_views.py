@@ -140,8 +140,8 @@ class Promote(Resource):
         }, 200
 
 
-class ResetPasswordRequest(Resource):
-    """Class to request reset password"""
+class ResetPassword(Resource):
+    """Class to reset password"""
 
     def __init__(self):
         """Initialize the login class"""
@@ -155,7 +155,7 @@ class ResetPasswordRequest(Resource):
         data = request.get_json()
         email = data["email"]
         mail = UserModels.check_email(self, email)
-        url = "v2.resetpassword"
+        url = "http://127.0.0.1:5500/UI/resetpassword.html?token="
         if not mail:
             return {
                 "status": 404,
@@ -168,11 +168,7 @@ class ResetPasswordRequest(Resource):
                 "message": "An Email has been sent with instructions"
         }, 200
 
-
-class ResetPassword(Resource):
-    """Class to reset password"""
-
-    def put(self, token):
+    def put(self):
         """Method to reset the password"""
         self.parser = RequestParser()
         self.parser.add_argument("password", type=str, required=True,
@@ -183,6 +179,8 @@ class ResetPassword(Resource):
         data = request.get_json()
         password = data["password"]
         confirm_password = data["confirm_password"]
+        if 'x-reset-token' in request.headers:
+            token = request.headers['x-reset-token']
         verify = auth.verify_token(token)
         if verify is None:
             return {

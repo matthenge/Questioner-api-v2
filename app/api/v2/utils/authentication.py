@@ -147,7 +147,7 @@ def send_mail(email, url, token):
             recipients=[email])
     msg.body = f"""To reset your password, visit the following link:
 
-{url_for(url, token=token, _external=True)}
+{(url+token)}
 
 If you did not make this request then ignore this email.
 """
