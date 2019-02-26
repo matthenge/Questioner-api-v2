@@ -155,7 +155,7 @@ class ResetPassword(Resource):
         data = request.get_json()
         email = data["email"]
         mail = UserModels.check_email(self, email)
-        url = "http://127.0.0.1:5500/UI/resetpassword.html?token="
+        url = "https://matthenge.github.io/Questioner/UI/resetpassword.html?token="
         if not mail:
             return {
                 "status": 404,
